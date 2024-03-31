@@ -85,8 +85,7 @@ def show_matrix(settings,
 
         for data, location, description in settings:
             r, c = location
-            # if keep_nan:
-                # data = fill_nan(data, mask=data)
+
             data = to_dense(data, keep_nan=keep_nan)
             im = axes[r, c].matshow(data, cmap=cmap)
             axes[r, c].set_title(description, fontdict={'fontsize': fontsize}, loc='left')
@@ -128,8 +127,7 @@ def show_matrix(settings,
             r, c = location
             r *= 2
             c *= 2
-            # if keep_nan:
-            #     data = fill_nan(data, mask=data)
+
             data = to_dense(data, keep_nan=keep_nan)
             dmin, dmax = (np.nanmin(data), np.nanmax(data)) if clim is None else (clim[0], clim[1])
 
@@ -141,8 +139,10 @@ def show_matrix(settings,
 
             vmin = dmin - (0.5 if center else 0)
             vmax = dmax + (0.5 if center else 0)
-            # cmap = plt.get_cmap(cmap, cnum) # deprecated
-            cmap = cm.get_cmap(cmap, cnum).copy()
+            try:
+                cmap = plt.get_cmap(cmap, cnum) # deprecated at some time
+            except:
+                cmap = cm.get_cmap(cmap, cnum).copy()
             cmap.set_under(cmin)
             cmap.set_over(cmax)
             cmap.set_bad(cnan)
